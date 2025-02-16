@@ -23,13 +23,18 @@ namespace TodoAPI.Estudantes
                 await context.Estudantes.AddAsync(novoEstudante);
                 await context.SaveChangesAsync();
 
-                return Results.Ok();
+                var estudanteRetorno = new EstudanteDTO(novoEstudante.Id, novoEstudante.Nome);
+
+                return Results.Ok(estudanteRetorno);
             });
 
             //Listar Estudante Ativo
             rotasEstudantes.MapGet("", async(AppDbContext context) =>
             {
-                var estudantes = await context.Estudantes.Where(estudante=>estudante.Ativo).ToListAsync();
+                var estudantes = await context.Estudantes
+                .Where(estudante=>estudante.Ativo)
+                .Select(estudante => new EstudanteDTO(estudante.Id,estudante.Nome))
+                .ToListAsync();
                 
                 return estudantes;
             });
@@ -46,7 +51,7 @@ namespace TodoAPI.Estudantes
 
                 await context.SaveChangesAsync();
 
-                return Results.Ok();
+                return Results.Ok(new EstudanteDTO(estudante.Id,estudante.Nome);
             });
         }
     }
