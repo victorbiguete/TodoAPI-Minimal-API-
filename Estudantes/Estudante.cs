@@ -17,5 +17,10 @@
         {
             Nome = nome;
         }
+
+        public void AtualizarAtivo(bool status)
+        {
+            Ativo = status;
+        }
     }
 }
