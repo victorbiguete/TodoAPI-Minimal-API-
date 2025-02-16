@@ -26,7 +26,28 @@ namespace TodoAPI.Estudantes
                 return Results.Ok();
             });
 
-            rotasEstudantes.MapGet("", async());
+            //Listar Estudante Ativo
+            rotasEstudantes.MapGet("", async(AppDbContext context) =>
+            {
+                var estudantes = await context.Estudantes.Where(estudante=>estudante.Ativo).ToListAsync();
+                
+                return estudantes;
+            });
+
+            //Atualizar Estudante
+            rotasEstudantes.MapPut("{id:guid}", async (Guid id,UpdateEstudanteRequest request, AppDbContext context) =>
+            {
+                var estudante = await context.Estudantes.SingleOrDefaultAsync(estudante => estudante.Id == id);
+
+                if (estudante == null)
+                    return Results.NotFound();
+
+                estudante.AtualizaNome(request.Nome);
+
+                await context.SaveChangesAsync();
+
+                return Results.Ok();
+            });
         }
     }
 }

@@ -12,5 +12,10 @@
             Id = Guid.NewGuid();
             Ativo = true;
         }
+
+        public void AtualizaNome(string nome)
+        {
+            Nome = nome;
+        }
     }
 }
